@@ -1,3 +1,7 @@
+# referrence
+# https://cntk.ai/pythondocs/CNTK_201B_CIFAR-10_ImageHandsOn.html
+# https://github.com/Microsoft/CNTK/blob/master/Examples/Image/Classification/AlexNet/Python/AlexNet_ImageNet_Distributed.py
+
 from __future__ import print_function # Use a function definition from future version (say 3.x from 2.7 interpreter)
 
 import matplotlib.pyplot as plt
@@ -7,6 +11,7 @@ import os
 import PIL
 import sys
 import logging
+import time
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -110,22 +115,30 @@ def create_alexnet(features, out_dims):
     return model(features)
 
 
-def train_loop(reader_train, reader_test, model_func, max_epochs):
+def train_model(reader_train, reader_test, model_func, max_epochs):
+    # similar to  placeholder in tensorflow
     input_var = C.input_variable((num_channels, image_height, image_width))
     label_var = C.input_variable((num_classes))
+
+    # preprocess
     mean_removed_features = C.minus(input_var, C.constant(114), name='mean_removed_input')
+
+    # output of network, loss and metrics
     z = model_func(mean_removed_features, out_dims=num_classes)
     ce = C.cross_entropy_with_softmax(z, label_var)
     pe = C.classification_error(z, label_var)
 
     epoch_size = 10400
     minibatch_size = 256
+    target_loss = 1.50
 
+    # learing rate, momentum coefficient and weight decay (regularization coefficient)
     lr_per_mb = [0.01] * 25 + [0.001] * 25 + [0.0001] * 25 + [0.00001] * 25 + [0.000001]
     lr_schedule = C.learning_parameter_schedule(lr_per_mb, minibatch_size=minibatch_size, epoch_size=epoch_size)
     mm_schedule = C.learners.momentum_schedule(0.9, minibatch_size=minibatch_size)
     l2_reg_weight = 0.0005  # CNTK L2 regularization is per sample, thus same as Caffe
 
+    # optimizer
     learner = C.learners.momentum_sgd(z.parameters,
                                       lr=lr_schedule,
                                       momentum=mm_schedule,
@@ -136,23 +149,44 @@ def train_loop(reader_train, reader_test, model_func, max_epochs):
                                                  num_epochs=max_epochs)
     trainer = C.Trainer(z, (ce, pe), [learner], [progress_printer])
 
+    # similar to feedict in tensorflow
     input_map = {
         input_var: reader_train.streams.features,
         label_var: reader_train.streams.labels
     }
-    C.logging.log_number_of_parameters(z);
-    print()
+    C.logging.log_number_of_parameters(z); print()
 
-    for epoch in range(max_epochs):
+    # train loop
+    finished = False
+    for epoch in range(1, max_epochs+1):
+        if finished:
+            logging.info("Training finished!")
+            break
         sample_count = 0
+        batch_cnt = 1
         while sample_count < epoch_size:
+            batch_begin_time = time.time()
             data = reader_train.next_minibatch(min(minibatch_size, epoch_size - sample_count),
                                                input_map=input_map)
-            trainer.train_minibatch(data)
+            _, dict_out = trainer.train_minibatch(data, outputs=[ce, pe])
+            curr_loss = np.asscalar(np.mean(dict_out[ce]))
+            curr_err_rate = np.asscalar(np.mean(dict_out[pe]))
+            #curr_loss = np.mean(ce.eval(data), axis=0)
+            logging.info("epoch[%d of %d] - batch[%d] - training loss=%f - training err_rate = %f %% - %f exampls/s"%
+                         (epoch, max_epochs, batch_cnt, curr_loss, curr_err_rate*100,
+                          data[label_var].num_samples/(time.time()-batch_begin_time)
+                          )
+                         )
             sample_count += data[label_var].num_samples
-        trainer.summarize_training_progress()
+            batch_cnt += 1
+            if curr_loss < target_loss:
+                finished = True
+                break
 
-train_loop(reader_train,
+
+begin_time = time.time()
+train_model(reader_train,
            reader_test,
            max_epochs=5,
            model_func=create_alexnet)
+logging.info("time consumed: %f" % (time.time() - begin_time))

@@ -30,7 +30,7 @@ log_dir = None
 image_height = 227
 image_width = 227
 num_channels = 3  # RGB
-num_classes = 1000
+num_classes = 8
 model_name = "AlexNet.model"
 
 
@@ -193,7 +193,7 @@ def train_and_test(network, trainer, train_source, test_source, minibatch_size, 
 
 # Train and evaluate the network.
 def alexnet_train_and_eval(train_data, test_data, num_quantization_bits=32, block_size=3200, warm_up=0,
-                           minibatch_size=256, epoch_size=1281167, max_epochs=112,
+                           minibatch_size=256, epoch_size=10400, max_epochs=112,
                            restore=True, log_to_file=None, num_mbs_per_log=None, gen_heartbeat=True):
     _cntk_py.set_computation_network_trace_level(0)
 
@@ -226,7 +226,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--num_epochs', help='Total number of epochs to train', type=int, required=False,
                         default='112')
     parser.add_argument('-m', '--minibatch_size', help='Minibatch size', type=int, required=False, default='256')
-    parser.add_argument('-e', '--epoch_size', help='Epoch size', type=int, required=False, default='1281167')
+    parser.add_argument('-e', '--epoch_size', help='Epoch size', type=int, required=False, default='10400')
     parser.add_argument('-q', '--quantized_bits', help='Number of quantized bits used for gradient aggregation',
                         type=int, required=False, default='32')
     parser.add_argument('-r', '--restart',
