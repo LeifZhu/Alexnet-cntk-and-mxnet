@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python train_imagenet.py --network alexnet \
+python code/train_imagenet.py --network alexnet \
 			 --num-classes 8 \
 			 --data-train /home/leizhu/dataset/imagenet8/mxnet-format/train_rec.rec \
 			 --data-val /home/leizhu/dataset/imagenet8/mxnet-format/val_rec.rec \
