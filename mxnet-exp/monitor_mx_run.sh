@@ -1,8 +1,10 @@
 #!/bin/bash
 
+
+
 function run()
 {
-	target=2.07
+	target=1.5
 	cntk configFile=alexnet.cntk \
 		precision="$1" \
 		numCPUThreads=$2 \
@@ -11,23 +13,17 @@ function run()
 		DataDir="/root/zl_workspace/dataset/imagenet8/raw" \
 		>/dev/null &
 
-	logfile=Output/AlexNet
-	
 	begin_time=$(date +%s)
-	sleep 10
+
+	sleep 30
 
 	for((;;))
 	do
-		tail -n1 $logfile
-		loss=$(tail -n1 $logfile | sed -n 's/.*ce = \([0-9]\+.[0-9]\+\).*/\1/p')
-		if [ -n "$loss" ] 
+		tail -n1 Output/AlexNet
+		loss=$(tail -n1 Output/AlexNet | sed -n 's/.*ce = \([0-9]\+.[0-9]\+\).*/\1/p')
+		if [ $(echo "${loss} < ${target}" | bc) -eq 1 ]
 		then
-			if [ $(echo "${loss} < ${target}" | bc) -eq 1 ]
-			then
-				break
-			else
-				sleep 10
-			fi
+			break
 		else
 			sleep 10
 		fi
@@ -36,16 +32,16 @@ function run()
 	run_time=$((end_time - begin_time))
 	echo "$1, $2, $3, $4, $run_time" >> $5
 	echo "training finshed! Cost ${run_time} s."
-	ps aux | grep "cntk configFile=alexnet.cntk" | grep -v "grep" |awk {'print $2'} | xargs kill
-	echo "killed process successfully!"
+	ps aux | grep "cntk configFile=brain_alexnet.cntk" | grep -v "grep" |awk {'print $2'} | xargs kill
 	rm -rf Output
 	echo "finished removal successfully!"
 }
 
-ps aux | grep "cntk configFile=alexnet.cntk" | grep -v "grep" |awk {'print $2'} | xargs kill
+ps aux | grep "cntk configFile=brain_alexnet.cntk" | grep -v "grep" |awk {'print $2'} | xargs kill
 rm -rf Output
 touch results.csv
-echo "prec, nct, hcm, fda, run_time" > results.csv
+echo "" > results.csv
+echo "prec, nct, hcm, fda, run_time" >> results.csv
 
 for fda in false true; do
 	for hcm in false true; do
