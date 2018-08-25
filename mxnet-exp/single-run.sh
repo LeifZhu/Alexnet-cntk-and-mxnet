@@ -10,4 +10,5 @@ python code/train_imagenet.py --network alexnet \
 			 --disp-batches 1 \
 			 --batch-size 256 \
 			 --lr 0.01 \
-			 --lr-step-epochs 5,10
+			 --lr-step-epochs 5,10 \
+			 > mx_alexnet.log 2>&1 &
