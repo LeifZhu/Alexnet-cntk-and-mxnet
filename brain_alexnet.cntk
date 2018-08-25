@@ -2,7 +2,7 @@
 RootDir = "."
 
 ConfigDir = "$RootDir$"
-DataDir = "/home/leizhu/dataset/imagenet8/raw"
+DataDir = "/root/zl_workspace/dataset/imagenet8/raw"
 OutputDir = "$RootDir$/Output"
 ModelDir = "$OutputDir$/Models"
 
