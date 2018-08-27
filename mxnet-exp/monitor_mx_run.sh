@@ -4,10 +4,10 @@ function run()
 {
 	target=1.5	
 	logfile=mx_alexnet.log
-	export MXNET_CPU_WORKER_NTHREADS=$1
-	export MXNET_CPU_PRIORITY_NTHREADS=$2
-	export MXNET_CPU_NNPACK_NTHREADS=$3
-	export MXNET_EXEC_ENABLE_INPLACE=$4
+	export MXNET_ENGINE_TYPE=$1
+	export MXNET_EXEC_BULK_EXEC_INFERENCE=$2
+	export MXNET_EXEC_BULK_EXEC_TRAIN=$3
+	export MXNET_KVSTORE_REDUCTION_NTHREADS=$4
 	python code/train_imagenet.py --network alexnet \
 				 --num-classes 8 \
 				 --data-train /root/zl_workspace/dataset/imagenet8/mxnet-format/train_rec.rec \
@@ -52,18 +52,15 @@ function run()
 
 ps aux | grep "python code/train_imagenet.py" | grep -v "grep" | awk {'print $2'} | xargs kill
 touch results.csv
-echo "mcwn, mcpn, mcnn, meei, run_time" > results.csv
+echo "met, mebei, mebet, mkrn, run_time" > results.csv
 
-for mcwn in 1 2 4 8; do
-	for mcpn in 4 1 2 8; do
-		for mcnn in 4 1 2 8; do
-			for meei in true false; do
-				if [ $(($mcwn + $mcpn + $mcnn)) -le 16 ]
-				then
-					run $mcwn $mcpn $mcnn $meei results.csv
+for met in ThreadedEnginePerDevice ThreadedEngine NaiveEngine; do
+	for mebei in 1 0; do
+		for mebet in 1 0; do
+			for mkrn in  4 1 2 8; do
+					run $met $mebei $mebet $mkrn results.csv
 					echo "waiting for restart..."
 					sleep 10
-				fi
 			done
 		done
 	done
