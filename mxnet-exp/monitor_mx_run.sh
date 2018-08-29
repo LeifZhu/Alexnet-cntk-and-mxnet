@@ -54,7 +54,7 @@ ps aux | grep "python code/train_imagenet.py" | grep -v "grep" | awk {'print $2'
 touch results.csv
 echo "met, mebei, mebet, mkrn, run_time" > results.csv
 
-for met in ThreadedEnginePerDevice ThreadedEngine NaiveEngine; do
+for met in NaiveEngine ThreadedEnginePerDevice ThreadedEngine; do
 	for mebei in 1 0; do
 		for mebet in 1 0; do
 			for mkrn in  4 1 2 8; do
