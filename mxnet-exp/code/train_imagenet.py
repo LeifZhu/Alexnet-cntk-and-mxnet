@@ -61,6 +61,11 @@ if __name__ == '__main__':
     from importlib import import_module
     net = import_module('symbols.'+args.network)
     sym = net.get_symbol(**vars(args))
-
+    # check env
+    envar = "MXNET_ENGINE_TYPE"
+    if envar  in os.environ:
+        logging.debug("%s: %s"%(envar, os.environ[envar]))
+    else:
+        logging.debug("%s export failed"%(envar))
     # train
     fit.fit(args, sym, data.get_rec_iter)
