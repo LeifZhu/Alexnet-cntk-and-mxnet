@@ -2,6 +2,7 @@
 
 function run()
 {
+	interval=2
 	target=1.5	
 	logfile=mx_alexnet.log
 	export MXNET_ENGINE_TYPE=$1
@@ -22,7 +23,7 @@ function run()
 				 >$logfile 2>&1 &
 	
 	begin_time=$(date +%s)
-	sleep 10
+	sleep $interval
 
 	for((;;))
 	do
@@ -34,10 +35,10 @@ function run()
 			then
 				break
 			else
-				sleep 10
+				sleep $interval
 			fi
 		else
-			sleep 10
+			sleep $interval
 		fi
 	done
 	end_time=`date +%s`
@@ -54,7 +55,7 @@ ps aux | grep "python code/train_imagenet.py" | grep -v "grep" | awk {'print $2'
 touch results.csv
 echo "met, mebei, mebet, mkrn, run_time" > results.csv
 
-for met in ThreadedEnginePerDevice ThreadedEngine NaiveEngine; do
+for met in NaiveEngine ThreadedEnginePerDevice ThreadedEngine; do
 	for mebei in 1 0; do
 		for mebet in 1 0; do
 			for mkrn in  4 1 2 8; do
