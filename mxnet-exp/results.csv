@@ -1,9 +1,0 @@
-met, mebei, mebet, mkrn, run_time
-ThreadedEnginePerDevice, 1, 1, 4, 199
-ThreadedEnginePerDevice, 1, 1, 1, 187
-ThreadedEnginePerDevice, 1, 1, 2, 184
-ThreadedEnginePerDevice, 1, 1, 8, 189
-ThreadedEnginePerDevice, 1, 0, 4, 203
-ThreadedEnginePerDevice, 1, 0, 1, 189
-ThreadedEnginePerDevice, 1, 0, 2, 193
-ThreadedEnginePerDevice, 1, 0, 8, 185
