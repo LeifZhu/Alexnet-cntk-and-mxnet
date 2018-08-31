@@ -2,3 +2,4 @@ Model/
 .idea/
 *.pyc
 *.swp
+*.log
