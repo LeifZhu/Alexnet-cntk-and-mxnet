@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/root/zl_workspace/incubator-mxnet/tools/launch.py -n 4 -H hosts --launcher ssh \
+/root/zl_workspace/incubator-mxnet/tools/launch.py -n 20 -H hosts --launcher ssh \
 python code/train_imagenet.py --network alexnet \
 							 --num-classes 8 \
 							 --data-train /root/zl_workspace/dataset/imagenet8/mxnet-format/train_rec.rec \
