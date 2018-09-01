@@ -1,0 +1,80 @@
+/root/anaconda2/lib/python2.7/site-packages/h5py/__init__.py:34: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+INFO:root:start with arguments Namespace(batch_size=256, benchmark=0, brightness=0, contrast=0, data_nthreads=4, data_train='/root/zl_workspace/dataset/imagenet8/mxnet-format/train_rec.rec', data_train_idx='', data_val='/root/zl_workspace/dataset/imagenet8/mxnet-format/val_rec.rec', data_val_idx='', disp_batches=1, dtype='float32', fill_value=127, gc_threshold=0.5, gc_type='none', gpus=None, image_shape='3,224,224', initializer='default', kv_store='device', load_epoch=None, loss='ce', lr=0.01, lr_factor=0.1, lr_step_epochs='5,10', macrobatch_size=0, max_crop_size=-1, max_random_area=1, max_random_aspect_ratio=0, max_random_h=0, max_random_l=0, max_random_rotate_angle=0, max_random_s=0, max_random_scale=1, max_random_shear_ratio=0, min_crop_size=-1, min_random_area=1, min_random_aspect_ratio=None, min_random_scale=1, model_prefix=None, mom=0.9, monitor=0, network='alexnet', num_classes=8, num_epochs=20, num_examples=10400, num_layers=50, optimizer='sgd', pad_size=0, pca_noise=0, profile_server_suffix='', profile_worker_suffix='', random_crop=0, random_mirror=0, random_resized_crop=0, rgb_mean='123.68,116.779,103.939', rgb_std='1,1,1', saturation=0, save_period=1, test_io=0, top_k=0, warmup_epochs=5, warmup_strategy='linear', wd=0.0001)
+[20:45:19] src/io/iter_image_recordio_2.cc:170: ImageRecordIOParser2: /root/zl_workspace/dataset/imagenet8/mxnet-format/train_rec.rec, use 4 threads for decoding..
+Traceback (most recent call last):
+  File "code/train_imagenet.py", line 66, in <module>
+    fit.fit(args, sym, data.get_rec_iter)
+  File "/root/zl_workspace/Alexnet-cntk-and-mxnet/mxnet-exp/code/common/fit.py", line 179, in fit
+    (train, val) = data_loader(args, kv)
+  File "/root/zl_workspace/Alexnet-cntk-and-mxnet/mxnet-exp/code/common/data.py", line 184, in get_rec_iter
+    part_index          = rank)
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/io.py", line 941, in creator
+    return MXDataIter(iter_handle, **kwargs)
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/io.py", line 800, in __init__
+    self.first_batch = self.next()
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/io.py", line 834, in next
+    check_call(_LIB.MXDataIterNext(self.handle, ctypes.byref(next_res)))
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/base.py", line 149, in check_call
+    raise MXNetError(py_str(_LIB.MXGetLastError()))
+mxnet.base.MXNetError: [20:45:19] src/engine/./thread_pool.h:72: Check failed: size > 0 (0 vs. 0) 
+
+Stack trace returned 10 entries:
+[bt] (0) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a11c4) [0x7f57734d71c4]
+[bt] (1) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a15c1) [0x7f57734d75c1]
+[bt] (2) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24d9d89) [0x7f577580fd89]
+[bt] (3) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24dbdb2) [0x7f5775811db2]
+[bt] (4) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24e0382) [0x7f5775816382]
+[bt] (5) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c7f8b) [0x7f57757fdf8b]
+[bt] (6) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c84c5) [0x7f57757fe4c5]
+[bt] (7) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c85e8) [0x7f57757fe5e8]
+[bt] (8) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1acc20) [0x7f57734e2c20]
+[bt] (9) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x25cb579) [0x7f5775901579]
+
+
+Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "/root/anaconda2/lib/python2.7/atexit.py", line 24, in _run_exitfuncs
+    func(*targs, **kargs)
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/base.py", line 395, in _notify_shutdown
+    check_call(_LIB.MXNotifyShutdown())
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/base.py", line 149, in check_call
+    raise MXNetError(py_str(_LIB.MXGetLastError()))
+MXNetError: [20:45:19] src/engine/./thread_pool.h:72: Check failed: size > 0 (0 vs. 0) 
+
+Stack trace returned 10 entries:
+[bt] (0) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a11c4) [0x7f57734d71c4]
+[bt] (1) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a15c1) [0x7f57734d75c1]
+[bt] (2) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24d9d89) [0x7f577580fd89]
+[bt] (3) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24dbdb2) [0x7f5775811db2]
+[bt] (4) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24e0382) [0x7f5775816382]
+[bt] (5) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c7f8b) [0x7f57757fdf8b]
+[bt] (6) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c84c5) [0x7f57757fe4c5]
+[bt] (7) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c85e8) [0x7f57757fe5e8]
+[bt] (8) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(MXNotifyShutdown+0x16) [0x7f5775797926]
+[bt] (9) /root/anaconda2/lib/python2.7/lib-dynload/_ctypes.so(ffi_call_unix64+0x4c) [0x7f57a1cd657c]
+
+
+Error in sys.exitfunc:
+Traceback (most recent call last):
+  File "/root/anaconda2/lib/python2.7/atexit.py", line 24, in _run_exitfuncs
+    func(*targs, **kargs)
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/base.py", line 395, in _notify_shutdown
+    check_call(_LIB.MXNotifyShutdown())
+  File "/root/anaconda2/lib/python2.7/site-packages/mxnet/base.py", line 149, in check_call
+    raise MXNetError(py_str(_LIB.MXGetLastError()))
+mxnet.base.MXNetError: [20:45:19] src/engine/./thread_pool.h:72: Check failed: size > 0 (0 vs. 0) 
+
+Stack trace returned 10 entries:
+[bt] (0) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a11c4) [0x7f57734d71c4]
+[bt] (1) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x1a15c1) [0x7f57734d75c1]
+[bt] (2) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24d9d89) [0x7f577580fd89]
+[bt] (3) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24dbdb2) [0x7f5775811db2]
+[bt] (4) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24e0382) [0x7f5775816382]
+[bt] (5) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c7f8b) [0x7f57757fdf8b]
+[bt] (6) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c84c5) [0x7f57757fe4c5]
+[bt] (7) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(+0x24c85e8) [0x7f57757fe5e8]
+[bt] (8) /root/anaconda2/lib/python2.7/site-packages/mxnet/libmxnet.so(MXNotifyShutdown+0x16) [0x7f5775797926]
+[bt] (9) /root/anaconda2/lib/python2.7/lib-dynload/_ctypes.so(ffi_call_unix64+0x4c) [0x7f57a1cd657c]
+
+
