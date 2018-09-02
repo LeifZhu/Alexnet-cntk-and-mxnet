@@ -65,7 +65,7 @@ echo "kvrn, kvbb, kvstore, snum, wnum, run_time" > $rfile
 # run 4 1000000 dist_sync 5 5 $rfile
 
 # serch
-for kvrn in 4 1 8; do
+for kvrn in 2 5 8; do
 	for kvbb in 1000000 10000; do
 		for kvstore in dist_sync dist_async; do
 			for snum in 2 5 10; do
