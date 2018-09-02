@@ -1,3 +1,4 @@
 #!/bin/bash
 
-cat hosts | while read host;  do ssh -o "StrictHostKeyChecking no" $host "pkill -f python"; done
+num=$(cat hosts | wc -l)
+cat hosts | xargs -i{} -P ${num} ssh {} "bash /root/zl_workspace/Alexnet-cntk-and-mxnet/mxnet-exp/kill_local.sh" 
